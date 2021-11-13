@@ -79,11 +79,18 @@ class MainActivity : AppCompatActivity() {
             user.results[0].location.coordinates.latitude,
             user.results[0].location.coordinates.longitude
         )
+
         binding?.coordLayout?.root?.setOnClickListener {
             val latitude = user.results[0].location.coordinates.latitude
             val longitude = user.results[0].location.coordinates.longitude
             val uri = Uri.parse("geo:${latitude},${longitude}?q=${latitude},${longitude}")
             val intent = Intent(Intent.ACTION_VIEW, uri)
+            startActivity(intent)
+        }
+
+        binding?.phoneLayout?.root?.setOnClickListener {
+            val phoneNumber = user.results[0].phone
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse("tel:$phoneNumber"))
             startActivity(intent)
 
         }
