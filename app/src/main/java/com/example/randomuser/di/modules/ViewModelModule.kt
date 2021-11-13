@@ -2,7 +2,7 @@ package com.example.randomuser.di.modules
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.randomuser.di.ViewModelFactory
+import com.example.randomuser.base.ViewModelFactory
 import com.example.randomuser.di.ViewModelKey
 import com.example.randomuser.ui.viewmodel.UserViewModel
 import dagger.Binds

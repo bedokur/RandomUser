@@ -4,139 +4,139 @@ import com.google.gson.annotations.SerializedName
 
 data class User(
     @SerializedName("results")
-    val results: List<Result>?,
+    val results: List<Result>,
     @SerializedName("info")
-    val info: Info?
+    val info: Info
 )
 
 data class Result(
     @SerializedName("gender")
-    val gender: String?,
+    val gender: String,
     @SerializedName("name")
-    val name: Name?,
+    val name: Name,
     @SerializedName("location")
-    val location: Location?,
+    val location: Location,
     @SerializedName("email")
-    val email: String?,
+    val email: String,
     @SerializedName("login")
-    val login: Login?,
+    val login: Login,
     @SerializedName("dob")
-    val dob: Dob?,
+    val dob: Dob,
     @SerializedName("registered")
-    val registered: Registered?,
+    val registered: Registered,
     @SerializedName("phone")
-    val phone: String?,
+    val phone: String,
     @SerializedName("cell")
-    val cell: String?,
+    val cell: String,
     @SerializedName("id")
-    val id: Id?,
+    val id: Id,
     @SerializedName("picture")
-    val picture: Picture?,
+    val picture: Picture,
     @SerializedName("nat")
-    val nat: String?
+    val nat: String
 )
 
 data class Info(
     @SerializedName("seed")
-    val seed: String?,
+    val seed: String,
     @SerializedName("results")
-    val results: Int?,
+    val results: Int,
     @SerializedName("page")
-    val page: Int?,
+    val page: Int,
     @SerializedName("version")
-    val version: String?
+    val version: String
 )
 
 data class Name(
     @SerializedName("title")
-    val title: String?,
+    val title: String,
     @SerializedName("first")
-    val first: String?,
+    val first: String,
     @SerializedName("last")
-    val last: String?
+    val last: String
 )
 
 data class Location(
     @SerializedName("street")
-    val street: Street?,
+    val street: Street,
     @SerializedName("city")
-    val city: String?,
+    val city: String,
     @SerializedName("state")
-    val state: String?,
+    val state: String,
     @SerializedName("country")
-    val country: String?,
+    val country: String,
     @SerializedName("postcode")
-    val postcode: Int?,
+    val postcode: Any,
     @SerializedName("coordinates")
-    val coordinates: Coordinates?,
+    val coordinates: Coordinates,
     @SerializedName("timezone")
-    val timezone: Timezone?
+    val timezone: Timezone
 )
 
 data class Login(
     @SerializedName("uuid")
-    val uuid: String?,
+    val uuid: String,
     @SerializedName("username")
-    val username: String?,
+    val username: String,
     @SerializedName("password")
-    val password: String?,
+    val password: String,
     @SerializedName("salt")
-    val salt: String?,
+    val salt: String,
     @SerializedName("md5")
-    val md5: String?,
+    val md5: String,
     @SerializedName("sha1")
-    val sha1: String?,
+    val sha1: String,
     @SerializedName("sha256")
-    val sha256: String?
+    val sha256: String
 )
 
 data class Dob(
     @SerializedName("date")
-    val date: String?,
+    val date: String,
     @SerializedName("age")
-    val age: Int?
+    val age: Int
 )
 
 data class Registered(
     @SerializedName("date")
-    val date: String?,
+    val date: String,
     @SerializedName("age")
-    val age: Int?
+    val age: Int
 )
 
 data class Id(
     @SerializedName("name")
-    val name: String?,
+    val name: String,
     @SerializedName("value")
-    val value: String?
+    val value: String
 )
 
 data class Picture(
     @SerializedName("large")
-    val large: String?,
+    val large: String,
     @SerializedName("medium")
-    val medium: String?,
+    val medium: String,
     @SerializedName("thumbnail")
-    val thumbnail: String?
+    val thumbnail: String
 )
 
 data class Street(
     @SerializedName("number")
-    val number: Int?,
+    val number: Int,
     @SerializedName("name")
-    val name: String?
+    val name: String
 )
 
 data class Coordinates(
     @SerializedName("latitude")
-    val latitude: String?,
+    val latitude: String,
     @SerializedName("longitude")
-    val longitude: String?
+    val longitude: String
 )
 
 data class Timezone(
     @SerializedName("offset")
-    val offset: String?,
+    val offset: String,
     @SerializedName("description")
-    val description: String?
+    val description: String
 )

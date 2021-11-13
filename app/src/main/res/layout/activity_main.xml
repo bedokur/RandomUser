@@ -4,24 +4,56 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <androidx.constraintlayout.widget.ConstraintLayout xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".ui.view.MainActivity">
+        android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Hello World!"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="8dp"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/user_pic"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_gravity="center"
+                android:src="@drawable/portrait_placeholder" />
 
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <TextView
+                android:id="@+id/user_name"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="8dp"
+                android:includeFontPadding="false"
+                android:text="Mr Timm Rogge"
+                android:textAppearance="?attr/textAppearanceHeadline6"
+                android:textSize="24sp" />
+
+            <include
+                android:id="@+id/birth_layout"
+                layout="@layout/birthdate_layout" />
+
+            <include
+                android:id="@+id/phone_layout"
+                layout="@layout/phone_number_layout" />
+
+            <include
+                android:id="@+id/country_layout"
+                layout="@layout/country_layout" />
+
+            <include
+                android:id="@+id/address_layout"
+                layout="@layout/address_layout" />
+
+            <include
+                android:id="@+id/coord_layout"
+                layout="@layout/coordinates_layout" />
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
 
 </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
