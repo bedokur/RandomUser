@@ -24,6 +24,7 @@
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:layout_gravity="center"
+                android:focusable="false"
                 android:src="@drawable/portrait_placeholder" />
 
 
@@ -59,7 +60,9 @@
             <include
                 android:id="@+id/coord_layout"
                 layout="@layout/coordinates_layout" />
+
         </LinearLayout>
+
     </androidx.core.widget.NestedScrollView>
 
 </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

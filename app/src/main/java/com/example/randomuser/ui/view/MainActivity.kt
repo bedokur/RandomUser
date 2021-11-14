@@ -7,8 +7,6 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
-import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
@@ -19,6 +17,7 @@ import com.example.randomuser.data.NetworkCallResult
 import com.example.randomuser.data.models.User
 import com.example.randomuser.databinding.ActivityMainBinding
 import com.example.randomuser.ui.viewmodel.UserViewModel
+import com.example.randomuser.util.ImagePicker
 import java.util.*
 import javax.inject.Inject
 
@@ -37,8 +36,16 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding?.root)
         (applicationContext as RandUserApp).appComponent.inject(this)
-
         viewModel = ViewModelProvider(this, viewModelFactory)[UserViewModel::class.java]
+
+        val imagePicker = ImagePicker(activityResultRegistry, this) {
+            if (it != null) {
+                Glide.with(this)
+                    .load(it)
+                    .apply(RequestOptions.circleCropTransform())
+                    .into(binding?.userPic!!)
+            }
+        }
 
         viewModel?.userData?.observe(this, {
             when (it) {
@@ -54,6 +61,10 @@ class MainActivity : AppCompatActivity() {
 
         binding?.swipeRefreshLayout?.setOnRefreshListener {
             viewModel?.getUserData()
+            disableEditMode()
+            menu.findItem(R.id.action_save).isVisible = false
+            menu.findItem(R.id.action_edit).isVisible = true
+
         }
 
         binding?.linearLayout?.setOnFocusChangeListener { v, hasFocus ->
@@ -64,7 +75,7 @@ class MainActivity : AppCompatActivity() {
 
         binding?.userPic?.setOnClickListener {
             if (it.isFocusable) {
-                getImage.launch("image/*")
+                imagePicker.pickImage()
             }
         }
     }
@@ -195,15 +206,5 @@ class MainActivity : AppCompatActivity() {
     companion object {
         private const val PLUS_MONTH = 1
     }
-
-    private val getImage: ActivityResultLauncher<String> =
-        registerForActivityResult(ActivityResultContracts.GetContent()) {
-            if (it != null) {
-                Glide.with(this)
-                    .load(it)
-                    .apply(RequestOptions.circleCropTransform())
-                    .into(binding?.userPic!!)
-            }
-        }
 
 }
