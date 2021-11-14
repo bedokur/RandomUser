@@ -1,24 +1,29 @@
 package com.example.randomuser.ui.view
 
+import android.app.DatePickerDialog
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-import com.example.randomuser.R
-import com.example.randomuser.RandUserApp
+import com.example.randomuser.*
 import com.example.randomuser.base.ViewModelFactory
 import com.example.randomuser.data.NetworkCallResult
 import com.example.randomuser.data.models.User
 import com.example.randomuser.databinding.ActivityMainBinding
 import com.example.randomuser.ui.viewmodel.UserViewModel
+import java.util.*
 import javax.inject.Inject
 
 class MainActivity : AppCompatActivity() {
+
     private var binding: ActivityMainBinding? = null
+    lateinit var menu: Menu
 
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
@@ -49,7 +54,53 @@ class MainActivity : AppCompatActivity() {
             viewModel?.getUserData()
         }
 
+        binding?.linearLayout?.setOnFocusChangeListener { v, hasFocus ->
+            if (hasFocus) {
+                v.hideKeyboard()
+            }
+        }
+    }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.actionbar, menu)
+        this.menu = menu!!
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    private fun peekBirthDate() {
+        val userDate = binding?.birthLayout?.birthD?.text.toString()
+        val calendar = getDateForCalendar(userDate)
+        val listener =
+            DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
+                binding?.birthLayout?.birthD?.setText(
+                    getStringFromPicked(year, month + PLUS_MONTH, dayOfMonth)
+                )
+            }
+        DatePickerDialog(
+            this,
+            listener,
+            calendar[Calendar.YEAR],
+            calendar[Calendar.MONTH],
+            calendar[Calendar.DAY_OF_MONTH]
+        ).show()
+
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
+        R.id.action_edit -> {
+            enableEditMode()
+            menu.findItem(R.id.action_edit).isVisible = false
+            menu.findItem(R.id.action_save).isVisible = true
+            true
+        }
+        R.id.action_save -> {
+            disableEditMode()
+            binding?.linearLayout?.requestFocus()
+            menu.findItem(R.id.action_save).isVisible = false
+            menu.findItem(R.id.action_edit).isVisible = true
+            true
+        }
+        else -> super.onOptionsItemSelected(item)
     }
 
     private fun setUpUI(user: User) {
@@ -58,26 +109,32 @@ class MainActivity : AppCompatActivity() {
             .apply(RequestOptions.circleCropTransform())
             .into(binding?.userPic!!)
 
-        binding?.userName?.text = getString(
-            R.string.username_template,
-            user.results[0].name.title,
-            user.results[0].name.first,
-            user.results[0].name.last
+        binding?.userName?.setText(
+            getString(
+                R.string.username_template,
+                user.results[0].name.title,
+                user.results[0].name.first,
+                user.results[0].name.last
+            )
         )
-        binding?.birthLayout?.birthD?.text = user.results[0].dob.date
-        binding?.phoneLayout?.phoneNumber?.text = user.results[0].phone
-        binding?.countryLayout?.countryName?.text = user.results[0].location.country
-        binding?.addressLayout?.cityName?.text = user.results[0].location.city
-        binding?.addressLayout?.address?.text = getString(
-            R.string.address_template,
-            user.results[0].location.street.name,
-            user.results[0].location.street.number
+        binding?.birthLayout?.birthD?.setText(getFormattedDate(user.results[0].dob.date))
+        binding?.phoneLayout?.phoneNumber?.setText(user.results[0].phone)
+        binding?.countryLayout?.countryName?.setText(user.results[0].location.country)
+        binding?.addressLayout?.cityName?.setText(user.results[0].location.city)
+        binding?.addressLayout?.address?.setText(
+            getString(
+                R.string.address_template,
+                user.results[0].location.street.name,
+                user.results[0].location.street.number
+            )
         )
 
-        binding?.coordLayout?.coordinates?.text = getString(
-            R.string.coordinates_template,
-            user.results[0].location.coordinates.latitude,
-            user.results[0].location.coordinates.longitude
+        binding?.coordLayout?.coordinates?.setText(
+            getString(
+                R.string.coordinates_template,
+                user.results[0].location.coordinates.latitude,
+                user.results[0].location.coordinates.longitude
+            )
         )
 
         binding?.coordLayout?.root?.setOnClickListener {
@@ -92,7 +149,31 @@ class MainActivity : AppCompatActivity() {
             val phoneNumber = user.results[0].phone
             val intent = Intent(Intent.ACTION_VIEW, Uri.parse("tel:$phoneNumber"))
             startActivity(intent)
-
         }
     }
+
+    private fun disableEditMode() {
+        binding?.userName?.isFocusableInTouchMode = false
+        binding?.birthLayout?.birthD?.setOnClickListener(null)
+        binding?.phoneLayout?.phoneNumber?.isFocusableInTouchMode = false
+        binding?.countryLayout?.countryName?.isFocusableInTouchMode = false
+        binding?.addressLayout?.address?.isFocusableInTouchMode = false
+        binding?.addressLayout?.cityName?.isFocusableInTouchMode = false
+        binding?.coordLayout?.coordinates?.isFocusableInTouchMode = false
+    }
+
+    private fun enableEditMode() {
+        binding?.userName?.isFocusableInTouchMode = true
+        binding?.birthLayout?.birthD?.setOnClickListener { peekBirthDate() }
+        binding?.phoneLayout?.phoneNumber?.isFocusableInTouchMode = true
+        binding?.countryLayout?.countryName?.isFocusableInTouchMode = true
+        binding?.addressLayout?.address?.isFocusableInTouchMode = true
+        binding?.addressLayout?.cityName?.isFocusableInTouchMode = true
+        binding?.coordLayout?.coordinates?.isFocusableInTouchMode = true
+    }
+
+    companion object {
+        private const val PLUS_MONTH = 1
+    }
+
 }
