@@ -7,6 +7,8 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
@@ -20,10 +22,11 @@ import com.example.randomuser.ui.viewmodel.UserViewModel
 import java.util.*
 import javax.inject.Inject
 
+
 class MainActivity : AppCompatActivity() {
 
     private var binding: ActivityMainBinding? = null
-    lateinit var menu: Menu
+    private lateinit var menu: Menu
 
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
@@ -33,7 +36,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding?.root)
-
         (applicationContext as RandUserApp).appComponent.inject(this)
 
         viewModel = ViewModelProvider(this, viewModelFactory)[UserViewModel::class.java]
@@ -57,6 +59,12 @@ class MainActivity : AppCompatActivity() {
         binding?.linearLayout?.setOnFocusChangeListener { v, hasFocus ->
             if (hasFocus) {
                 v.hideKeyboard()
+            }
+        }
+
+        binding?.userPic?.setOnClickListener {
+            if (it.isFocusable) {
+                getImage.launch("image/*")
             }
         }
     }
@@ -129,51 +137,73 @@ class MainActivity : AppCompatActivity() {
             )
         )
 
-        binding?.coordLayout?.coordinates?.setText(
+        binding?.coordLayout?.coordinatesLat?.setText(
             getString(
                 R.string.coordinates_template,
-                user.results[0].location.coordinates.latitude,
+                user.results[0].location.coordinates.latitude
+            )
+        )
+
+        binding?.coordLayout?.coordinatesLong?.setText(
+            getString(
+                R.string.coordinates_template,
                 user.results[0].location.coordinates.longitude
             )
         )
 
         binding?.coordLayout?.root?.setOnClickListener {
-            val latitude = user.results[0].location.coordinates.latitude
-            val longitude = user.results[0].location.coordinates.longitude
+            val latitude = binding?.coordLayout?.coordinatesLat?.text?.toString()
+            val longitude = binding?.coordLayout?.coordinatesLong?.text?.toString()
             val uri = Uri.parse("geo:${latitude},${longitude}?q=${latitude},${longitude}")
             val intent = Intent(Intent.ACTION_VIEW, uri)
             startActivity(intent)
         }
 
         binding?.phoneLayout?.root?.setOnClickListener {
-            val phoneNumber = user.results[0].phone
+            val phoneNumber = binding?.phoneLayout?.phoneNumber?.text?.toString()
             val intent = Intent(Intent.ACTION_VIEW, Uri.parse("tel:$phoneNumber"))
             startActivity(intent)
         }
     }
 
     private fun disableEditMode() {
+        binding?.userPic?.isFocusable = false
         binding?.userName?.isFocusableInTouchMode = false
         binding?.birthLayout?.birthD?.setOnClickListener(null)
         binding?.phoneLayout?.phoneNumber?.isFocusableInTouchMode = false
         binding?.countryLayout?.countryName?.isFocusableInTouchMode = false
         binding?.addressLayout?.address?.isFocusableInTouchMode = false
         binding?.addressLayout?.cityName?.isFocusableInTouchMode = false
-        binding?.coordLayout?.coordinates?.isFocusableInTouchMode = false
+        binding?.coordLayout?.coordinatesLat?.isFocusableInTouchMode = false
+        binding?.coordLayout?.coordinatesLong?.isFocusableInTouchMode = false
     }
 
     private fun enableEditMode() {
+        binding?.userPic?.isFocusable = true
         binding?.userName?.isFocusableInTouchMode = true
         binding?.birthLayout?.birthD?.setOnClickListener { peekBirthDate() }
         binding?.phoneLayout?.phoneNumber?.isFocusableInTouchMode = true
         binding?.countryLayout?.countryName?.isFocusableInTouchMode = true
         binding?.addressLayout?.address?.isFocusableInTouchMode = true
         binding?.addressLayout?.cityName?.isFocusableInTouchMode = true
-        binding?.coordLayout?.coordinates?.isFocusableInTouchMode = true
+        binding?.coordLayout?.coordinatesLat?.isFocusableInTouchMode = true
+        binding?.coordLayout?.coordinatesLong?.isFocusableInTouchMode = true
+
+
     }
 
     companion object {
         private const val PLUS_MONTH = 1
     }
+
+    private val getImage: ActivityResultLauncher<String> =
+        registerForActivityResult(ActivityResultContracts.GetContent()) {
+            if (it != null) {
+                Glide.with(this)
+                    .load(it)
+                    .apply(RequestOptions.circleCropTransform())
+                    .into(binding?.userPic!!)
+            }
+        }
 
 }

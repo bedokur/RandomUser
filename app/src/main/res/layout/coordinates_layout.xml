@@ -13,21 +13,40 @@
     app:strokeWidth="1dp">
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:orientation="vertical">
 
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Координаты"
+            android:text="Широта"
             android:textColor="?android:attr/textColorSecondary"
             android:textSize="20sp" />
 
         <EditText
-            android:id="@+id/coordinates"
+            android:id="@+id/coordinates_lat"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:background="@android:color/transparent"
+            android:focusable="false"
+            android:inputType="textNoSuggestions"
+            android:textAppearance="?attr/textAppearanceHeadline6"
+            android:textSize="24sp" />
+
+        <TextView
             android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Долгота"
+            android:textColor="?android:attr/textColorSecondary"
+            android:textSize="20sp" />
+
+        <EditText
+            android:id="@+id/coordinates_long"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:background="@android:color/transparent"
