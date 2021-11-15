@@ -14,7 +14,8 @@ import androidx.core.app.ActivityCompat
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-import com.example.randomuser.*
+import com.example.randomuser.R
+import com.example.randomuser.RandUserApp
 import com.example.randomuser.base.ViewModelFactory
 import com.example.randomuser.data.NetworkCallResult
 import com.example.randomuser.data.models.User
