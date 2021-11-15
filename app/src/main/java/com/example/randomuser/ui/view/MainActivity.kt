@@ -1,13 +1,16 @@
 package com.example.randomuser.ui.view
 
+import android.Manifest.permission.READ_EXTERNAL_STORAGE
 import android.app.DatePickerDialog
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
@@ -31,6 +34,8 @@ class MainActivity : AppCompatActivity() {
     lateinit var viewModelFactory: ViewModelFactory
     private var viewModel: UserViewModel? = null
 
+    private lateinit var imagePicker: ImagePicker
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -38,7 +43,7 @@ class MainActivity : AppCompatActivity() {
         (applicationContext as RandUserApp).appComponent.inject(this)
         viewModel = ViewModelProvider(this, viewModelFactory)[UserViewModel::class.java]
 
-        val imagePicker = ImagePicker(activityResultRegistry, this) {
+        imagePicker = ImagePicker(activityResultRegistry, this) {
             if (it != null) {
                 Glide.with(this)
                     .load(it)
@@ -46,6 +51,7 @@ class MainActivity : AppCompatActivity() {
                     .into(binding?.userPic!!)
             }
         }
+
 
         viewModel?.userData?.observe(this, {
             when (it) {
@@ -75,8 +81,40 @@ class MainActivity : AppCompatActivity() {
 
         binding?.userPic?.setOnClickListener {
             if (it.isFocusable) {
-                imagePicker.pickImage()
+                try {
+                    if (ActivityCompat.checkSelfPermission(
+                            this,
+                            READ_EXTERNAL_STORAGE
+                        ) != PackageManager.PERMISSION_GRANTED
+                    ) {
+                        ActivityCompat.requestPermissions(
+                            this,
+                            arrayOf(READ_EXTERNAL_STORAGE), PICK_FROM_GALLERY
+                        )
+                    } else {
+                        imagePicker.pickImage()
+                    }
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
             }
+        }
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        when (requestCode) {
+            PICK_FROM_GALLERY ->
+                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    imagePicker.pickImage()
+                } else {
+                    Toast.makeText(this, "Нет разрешения - нет автарки", Toast.LENGTH_SHORT)
+                        .show()
+                }
         }
     }
 
@@ -205,6 +243,7 @@ class MainActivity : AppCompatActivity() {
 
     companion object {
         private const val PLUS_MONTH = 1
+        private const val PICK_FROM_GALLERY = 0
     }
 
 }

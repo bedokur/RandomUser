@@ -9,8 +9,8 @@
 
     <item
         android:id="@+id/action_save"
-        android:icon="@drawable/ic_baseline_save_24"
-        android:title="@string/save"
+        android:icon="@drawable/ic_baseline_check_24"
+        android:title="@string/apply"
         android:visible="false"
         app:showAsAction="ifRoom" />
 

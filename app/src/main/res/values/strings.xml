@@ -8,5 +8,5 @@
     <string name="address_template">%1$s, %2$d</string>
     <string name="coordinates_template">%1$s</string>
     <string name="edit">Изменить</string>
-    <string name="save">Сохранить</string>
+    <string name="apply">Применить</string>
 </resources>
