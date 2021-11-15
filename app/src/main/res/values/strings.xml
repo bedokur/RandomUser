@@ -9,4 +9,7 @@
     <string name="coordinates_template">%1$s</string>
     <string name="edit">Изменить</string>
     <string name="apply">Применить</string>
+    <string name="latitude_text">Широта</string>
+    <string name="longitude_text">Долгота</string>
+    <string name="country_text">Страна</string>
 </resources>

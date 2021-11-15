@@ -1,4 +1,4 @@
-package com.example.randomuser
+package com.example.randomuser.util
 
 import android.content.Context
 import android.view.View

@@ -21,7 +21,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Широта"
+            android:text="@string/latitude_text"
             android:textColor="?android:attr/textColorSecondary"
             android:textSize="20sp" />
 
@@ -39,7 +39,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Долгота"
+            android:text="@string/longitude_text"
             android:textColor="?android:attr/textColorSecondary"
             android:textSize="20sp" />
 

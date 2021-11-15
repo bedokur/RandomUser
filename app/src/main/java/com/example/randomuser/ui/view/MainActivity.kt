@@ -20,7 +20,7 @@ import com.example.randomuser.data.NetworkCallResult
 import com.example.randomuser.data.models.User
 import com.example.randomuser.databinding.ActivityMainBinding
 import com.example.randomuser.ui.viewmodel.UserViewModel
-import com.example.randomuser.util.ImagePicker
+import com.example.randomuser.util.*
 import java.util.*
 import javax.inject.Inject
 
